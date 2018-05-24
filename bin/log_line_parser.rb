@@ -28,16 +28,20 @@ class LogLineParser
   end
 
   def generate_result
-    if data
-      {
-          page: @data[:web_page],
-          user: @data[:user_ip]
-      }
-    else
-      {
-          page: '',
-          user: ''
-      }
-    end
+    data ? match_data_result : no_match_data_result
+  end
+
+  def match_data_result
+    {
+        page: @data[:web_page],
+        user: @data[:user_ip]
+    }
+  end
+
+  def no_match_data_result
+    {
+        page: '',
+        user: ''
+    }
   end
 end
