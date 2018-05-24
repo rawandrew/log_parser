@@ -26,5 +26,11 @@ RSpec.describe LogLineParser do
       result = { page: '/help_page/1', user: '126.318.035.038' }
       expect(parser.parse(log_line: line_to_parse)).to eq result
     end
+
+    it 'parses correctly a log line even when the data is separated by several spaces' do
+      line_to_parse = '/help_page/1   126.318.035.038'
+      result = { page: '/help_page/1', user: '126.318.035.038' }
+      expect(parser.parse(log_line: line_to_parse)).to eq result
+    end
   end
 end
