@@ -2,7 +2,7 @@ class LogLineParser
   attr_reader :log_line, :data
 
   def parse(log_line: '')
-    set_log_line(log_line)
+    set_log_line_to log_line
     return false if log_line_not_string?
     return false if log_line_empty?
     extract_log_line_data
@@ -11,7 +11,7 @@ class LogLineParser
 
   private
 
-  def set_log_line(log_line)
+  def set_log_line_to(log_line)
     @log_line = log_line
   end
 
