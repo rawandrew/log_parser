@@ -3,7 +3,7 @@ require_relative 'bin/stats'
 
 file = File.open(ARGV.first)
 stats = Stats.new file: file
-puts 'Webpages ordered by most views:'
-puts stats.get_most_page_views
-puts 'Webpages ordered by most unique views:'
+puts 'Webpages ordered by page views descending:'
+puts stats.generate_page_views_stats
+puts 'Webpages ordered by unique page views descending:'
 puts stats.get_most_unique_page_views

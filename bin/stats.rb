@@ -10,7 +10,7 @@ class Stats
     get_data_from_file
   end
 
-  def get_most_page_views
+  def generate_page_views_stats
     return no_file unless file
     sort_log_data_using page_visits_data
   end
