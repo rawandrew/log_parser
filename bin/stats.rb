@@ -22,6 +22,12 @@ class Stats
 
   def get_most_unique_page_views
     return 'No log file to process' unless file
+    data.keys
+        .map { |website_page| generate_unique_page_visits_hash(website_page)}
+        .sort_by { |page_visits| page_visits[:visits] }
+        .reverse
+        .map { |page_visits| generate_page_visits_description(page_visits) }
+        .join("\n")
   end
 
   private
@@ -57,5 +63,9 @@ class Stats
 
   def generate_page_visits_description(page_visits)
     "#{page_visits[:page]} #{page_visits[:visits]} visits"
+  end
+
+  def generate_unique_page_visits_hash(website_page)
+    { page: website_page, visits: data[website_page][:visitors].size }
   end
 end
