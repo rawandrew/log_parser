@@ -1,12 +1,36 @@
 class LogLineParser
+  attr_reader :log_line, :data
 
   def parse(log_line: '')
-    return false unless log_line.kind_of? String
-    return false if log_line.empty?
-    data = log_line.match(/(?<web_page>\S*)\s*(?<user_ip>\d{3}\.\d{3}\.\d{3}\.\d{3})/)
+    set_log_line(log_line)
+    return false if log_line_not_string?
+    return false if log_line_empty?
+    extract_log_line_data
+    generate_result
+  end
+
+  private
+
+  def set_log_line(log_line)
+    @log_line = log_line
+  end
+
+  def log_line_not_string?
+    !@log_line.kind_of?(String)
+  end
+
+  def log_line_empty?
+    @log_line.empty?
+  end
+
+  def extract_log_line_data
+    @data = @log_line.match(/(?<web_page>\S*)\s*(?<user_ip>\d{3}\.\d{3}\.\d{3}\.\d{3})/)
+  end
+
+  def generate_result
     {
-        page: data[:web_page],
-        user: data[:user_ip]
+        page: @data[:web_page],
+        user: @data[:user_ip]
     }
   end
 end
