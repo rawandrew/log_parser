@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require_relative 'bin/stats'
 
-file = File.open(File.join(Dir.pwd, ARGV.first), 'r')
+file = File.open(ARGV.first)
 stats = Stats.new file: file
 puts 'Webpages ordered by most views:'
 puts stats.get_most_page_views
