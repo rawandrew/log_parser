@@ -32,5 +32,11 @@ RSpec.describe LogLineParser do
       result = { page: '/help_page/1', user: '126.318.035.038' }
       expect(parser.parse(log_line: line_to_parse)).to eq result
     end
+
+    it 'can handle a badly formatted log line' do
+      line_to_parse = '/help_page/1   126.318.035'
+      result = { page: '', user: '' }
+      expect(parser.parse(log_line: line_to_parse)).to eq result
+    end
   end
 end
