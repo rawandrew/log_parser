@@ -14,7 +14,7 @@ class Stats
     return 'No log file to process' unless file
     data.keys
         .map { |website_page| {page: website_page, visits: data[website_page][:visits] } }
-        .sort_by { |a| a[:visits] }
+        .sort_by { |page_visits| page_visits[:visits] }
         .reverse
         .map { |page_visits| "#{page_visits[:page]} #{page_visits[:visits]} visits"}
         .join("\n")
