@@ -9,10 +9,11 @@ class Stats
   end
 
   def get_most_page_views
+    return 'No log file to process' unless file
 
   end
 
   def get_most_unique_page_views
-
+    return 'No log file to process' unless file
   end
 end

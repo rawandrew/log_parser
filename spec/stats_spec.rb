@@ -29,10 +29,16 @@ RSpec.describe Stats do
   end
 
   context '#get_most_page_views' do
-
+    it 'return "No log file to process" if no file is avaiable' do
+      stats = Stats.new
+      expect(stats.get_most_page_views).to eq 'No log file to process'
+    end
   end
 
   context '#get_most_unique_page_views' do
-
+    it 'return "No log file to process" if no file is avaiable' do
+      stats = Stats.new
+      expect(stats.get_most_unique_page_views).to eq 'No log file to process'
+    end
   end
 end
