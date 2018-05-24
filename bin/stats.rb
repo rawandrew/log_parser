@@ -11,23 +11,13 @@ class Stats
   end
 
   def get_most_page_views
-    return 'No log file to process' unless file
-    data.keys
-        .map { |website_page| generate_page_visits_hash(website_page)}
-        .sort_by { |page_visits| page_visits[:visits] }
-        .reverse
-        .map { |page_visits| generate_page_visits_description(page_visits) }
-        .join("\n")
+    return no_file unless file
+    sort_log_data_using page_visits_data
   end
 
   def get_most_unique_page_views
-    return 'No log file to process' unless file
-    data.keys
-        .map { |website_page| generate_unique_page_visits_hash(website_page)}
-        .sort_by { |page_visits| page_visits[:visits] }
-        .reverse
-        .map { |page_visits| generate_page_visits_description(page_visits) }
-        .join("\n")
+    return no_file unless file
+    sort_log_data_using unique_page_visits_data
   end
 
   private
@@ -55,6 +45,28 @@ class Stats
         visits: 1,
         visitors: Set.new([line_data[:user]])
     }
+  end
+
+  def no_file
+    'No log file to process'
+  end
+
+  def sort_log_data_using(page_visits_data)
+    page_visits_data
+        .sort_by { |page_visits| page_visits[:visits] }
+        .reverse
+        .map { |page_visits| generate_page_visits_description(page_visits) }
+        .join("\n")
+  end
+
+  def page_visits_data
+    data.keys
+        .map {|website_page| generate_page_visits_hash(website_page)}
+  end
+
+  def unique_page_visits_data
+    data.keys
+        .map {|website_page| generate_unique_page_visits_hash(website_page)}
   end
 
   def generate_page_visits_hash(website_page)
