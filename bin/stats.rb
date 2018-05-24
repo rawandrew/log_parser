@@ -13,10 +13,10 @@ class Stats
   def get_most_page_views
     return 'No log file to process' unless file
     data.keys
-        .map { |website_page| {page: website_page, visits: data[website_page][:visits] } }
+        .map { |website_page| generate_page_visits_hash(website_page)}
         .sort_by { |page_visits| page_visits[:visits] }
         .reverse
-        .map { |page_visits| "#{page_visits[:page]} #{page_visits[:visits]} visits"}
+        .map { |page_visits| generate_page_visits_description(page_visits) }
         .join("\n")
   end
 
@@ -31,16 +31,31 @@ class Stats
     return data unless file
     file.each do |log_line|
       line_data = line_parser.parse log_line: log_line
-      if data[line_data[:page]]
-        @data[line_data[:page]][:visits] += 1
-        @data[line_data[:page]][:visitors] << line_data[:user]
-      else
-        @data[line_data[:page]] = {
-            visits: 1,
-            visitors: Set.new([line_data[:user]])
-        }
-      end
+      page_stats_exist?(line_data) ? update_page_visit_data(line_data) : initialize_data_for_new_page(line_data)
     end
-    @data
+  end
+
+  def page_stats_exist?(line_data)
+    data[line_data[:page]]
+  end
+
+  def update_page_visit_data(line_data)
+    @data[line_data[:page]][:visits] += 1
+    @data[line_data[:page]][:visitors] << line_data[:user]
+  end
+
+  def initialize_data_for_new_page(line_data)
+    @data[line_data[:page]] = {
+        visits: 1,
+        visitors: Set.new([line_data[:user]])
+    }
+  end
+
+  def generate_page_visits_hash(website_page)
+    { page: website_page, visits: data[website_page][:visits] }
+  end
+
+  def generate_page_visits_description(page_visits)
+    "#{page_visits[:page]} #{page_visits[:visits]} visits"
   end
 end
