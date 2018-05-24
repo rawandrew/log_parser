@@ -1,7 +1,7 @@
 require_relative 'log_line_parser'
 require 'set'
 
-class Stats
+class LogAnalyzer
   attr_reader :line_parser, :file, :data
 
   def initialize(file: false, line_parser: LogLineParser.new)
