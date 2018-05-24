@@ -7,7 +7,7 @@ class LogAnalyzer
   def initialize(file: false, line_parser: LogLineParser.new)
     @line_parser = line_parser
     @file = file
-    get_data_from_file
+    initialize_data_from_file
   end
 
   def generate_page_views_stats
@@ -22,7 +22,7 @@ class LogAnalyzer
 
   private
 
-  def get_data_from_file
+  def initialize_data_from_file
     @data = {}
     return data unless file
     file.each do |log_line|
