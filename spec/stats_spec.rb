@@ -65,7 +65,7 @@ RSpec.describe Stats do
   context '#get_most_unique_page_views' do
     it 'returns "No log file to process" if no file is avaiable' do
       stats = Stats.new
-      expect(stats.get_most_unique_page_views).to eq 'No log file to process'
+      expect(stats.generate_unique_page_views_stats).to eq 'No log file to process'
     end
 
     it 'returns the website pages ordered by number of page views' do
@@ -76,7 +76,7 @@ RSpec.describe Stats do
         f.puts '/home 184.123.665.067'
         f.rewind
         stats = Stats.new(file: f)
-        expect(stats.get_most_unique_page_views).to eq "/home 2 visits\n/contact 1 visits"
+        expect(stats.generate_unique_page_views_stats).to eq "/home 2 visits\n/contact 1 visits"
       end
     end
   end

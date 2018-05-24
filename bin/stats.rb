@@ -15,7 +15,7 @@ class Stats
     sort_log_data_using page_visits_data
   end
 
-  def get_most_unique_page_views
+  def generate_unique_page_views_stats
     return no_file unless file
     sort_log_data_using unique_page_visits_data
   end
