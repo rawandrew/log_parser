@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'tempfile'
 require_relative '../bin/stats'
 require_relative '../bin/log_line_parser'
 
@@ -18,8 +19,8 @@ RSpec.describe Stats do
     expect(stats.line_parser).to be_a LogLineParser
   end
 
-  it 'can intialize the stats with a file object' do
-    stats = Stats.new file: File.open(File.join(Dir.pwd, 'webserver.log'), 'r')
+  it 'can initialize the stats with a file object' do
+    stats = Stats.new(file: File.open(File.join(Dir.pwd, 'webserver.log'), 'r'))
     expect(stats.file).to be_a File
   end
 
@@ -28,15 +29,41 @@ RSpec.describe Stats do
     expect(stats.file).to be false
   end
 
+  it 'intializes the data after reading the file' do
+    Tempfile.create('log') do |f|
+      f.puts '/contact 184.123.665.067'
+      f.puts '/contact 184.123.665.067'
+      f.puts '/home 184.123.665.068'
+      f.rewind
+      expected_result = {
+          "/contact" => { visits: 2, visitors: Set.new(['184.123.665.067'])},
+          "/home" => { visits: 1, visitors: Set.new(['184.123.665.068'])}
+      }
+      stats = Stats.new file: f
+      expect(stats.data).to eq expected_result
+    end
+  end
+
   context '#get_most_page_views' do
-    it 'return "No log file to process" if no file is avaiable' do
+    it 'returns "No log file to process" if no file is avaiable' do
       stats = Stats.new
       expect(stats.get_most_page_views).to eq 'No log file to process'
+    end
+
+    it 'returns the website pages ordered by number of page views' do
+      Tempfile.create('log') do |f|
+        f.puts '/contact 184.123.665.067'
+        f.puts '/contact 184.123.665.067'
+        f.puts '/home 184.123.665.068'
+        f.rewind
+        stats = Stats.new(file: f)
+        expect(stats.get_most_page_views()).to eq "/contact 2 visits\n/home 1 visits"
+      end
     end
   end
 
   context '#get_most_unique_page_views' do
-    it 'return "No log file to process" if no file is avaiable' do
+    it 'returns "No log file to process" if no file is avaiable' do
       stats = Stats.new
       expect(stats.get_most_unique_page_views).to eq 'No log file to process'
     end
